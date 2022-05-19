@@ -1,89 +1,107 @@
-<template lang="html">
-  <div id="provider" class="">
-    <div v-if="provider" class="card-body">
-      <h4 class="card-title mb-0">{{ provider.name }}</h4>
-
-      <p v-if="provider.address">{{ provider.address }}</p>
-
-      <ul class="list-unstyled mb-0">
-        <li v-if="provider.phone">
-          <span class="fa fa-fw fa-phone" aria-hidden="true"></span> <span class="sr-only">Phone:</span>
-          <a :href="`tel:${provider.phone}`">
-            {{ formatPhone(provider.phone) }}
-          </a>
-        </li>
-        <li v-if="provider.fax">
-          <span class="fa fa-fw fa-fax" aria-hidden="true"></span> <span class="sr-only">Fax:</span>
-          <a :href="`fax:${provider.fax}`">
-            {{ formatPhone(provider.fax) }}
-          </a>
-        </li>
-        <li v-if="provider.email">
-          <span class="fa fa-fw fa-envelope" aria-hidden="true"></span> <span class="sr-only">Email:</span>
-          <a :href="`mailto:${provider.email}`" v-text="provider.email"></a><br>
-        </li>
-        <li v-if="provider.website">
-          <span class="fa fa-fw fa-globe" aria-hidden="true"></span> <span class="sr-only">Web:</span>
-          <a :href="provider.website" target="_blank">Website</a>
-        </li>
-      </ul>
-
-      <div v-if="provider.message" class="alert alert-warning my-2" v-html="provider.message"></div>
-
-    </div>
-
-    <div v-else class="card-body">
-      <span v-if="loading" class="fas fa-spinner fa-spin"></span>
-      {{ status }}
-    </div>
-
-  </div>
-</template>
-
-<script>
-const countyFeatureUrl =
-  'https://maps.hillsboroughcounty.org/arcgis/rest/services/InfoLayers/SW_FACILITIES/MapServer/1'
-const cityFeatureUrl =
-  'https://maps.hillsboroughcounty.org/arcgis/rest/services/MaintStar/MapServiceBaseMap_20150801_Production_1/MapServer/80'
-
-export default {
-  data: () => ({
-    provider: null,
-    loading: null,
-    status: null
-  }),
-  methods: {
-    async find(query) {
-      this.provider = null
-      this.loading = true
-      this.status = 'Loading...'
-
-      try {
-        let { attributes } = await query(countyFeatureUrl)
-        this.setProvider(attributes, 'TAG')
-        this.status = 'ok'
-      } catch (err) {
-        this.status = `A County Solid Waste Provider could not be determined. Searching City providers.`
-        try {
-          let { attributes } = await query(cityFeatureUrl)
-          this.setProvider(attributes, 'NAME')
-          this.status = 'ok'
-        } catch (err) {
-          // no results
-          this.status = 'A Solid Waste Provider could not be determined.'
-        }
-      } finally {
-        this.loading = false
-      }
-    },
-    setProvider(attributes, attr) {
-      this.provider = this.$providers.find(x =>
-        x.ids.includes(attributes[attr])
-      )
-    },
-    formatPhone(n) {
-      return `(${n.substring(0, 3)}) ${n.substring(3, 6)}-${n.substring(6, 10)}`
-    }
-  }
-}
+<script setup lang="ts">
+import { computed } from 'vue'
+import { esriProvider, provider, airtableProviders } from '../lib/providers'
+import { formatPhone } from '../lib/utils'
+import { Converter } from 'showdown'
+const md = new Converter()
 </script>
+
+<template>
+  <div
+    v-if="esriProvider.loading || airtableProviders.loading"
+    class="card-body d-flex justify-content-center"
+  >
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div v-else-if="provider !== undefined" class="card-header">
+    <h4 class="mb-0">{{ provider.name }}</h4>
+
+    <div v-if="provider.address">{{ provider.address }}</div>
+
+    <ul class="list-unstyled small mb-0">
+      <li v-if="provider.phone">
+        <!-- telephone -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-telephone me-2"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"
+          />
+        </svg>
+        <a :href="`tel:${provider.phone}`">
+          {{ formatPhone(provider.phone) }}
+        </a>
+      </li>
+
+      <li v-if="provider.fax">
+        <!-- printer -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-printer me-2"
+          viewBox="0 0 16 16"
+        >
+          <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z" />
+          <path
+            d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z"
+          />
+        </svg>
+        <a :href="`fax:${provider.fax}`">
+          {{ formatPhone(provider.fax) }}
+        </a>
+      </li>
+
+      <li v-if="provider.email">
+        <!-- envelope -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-envelope me-2"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"
+          />
+        </svg>
+        <a :href="`mailto:${provider.email}`" v-text="provider.email"></a><br />
+      </li>
+
+      <li v-if="provider.website">
+        <!-- gobe-2 -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-globe2 me-2"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855-.143.268-.276.56-.395.872.705.157 1.472.257 2.282.287V1.077zM4.249 3.539c.142-.384.304-.744.481-1.078a6.7 6.7 0 0 1 .597-.933A7.01 7.01 0 0 0 3.051 3.05c.362.184.763.349 1.198.49zM3.509 7.5c.036-1.07.188-2.087.436-3.008a9.124 9.124 0 0 1-1.565-.667A6.964 6.964 0 0 0 1.018 7.5h2.49zm1.4-2.741a12.344 12.344 0 0 0-.4 2.741H7.5V5.091c-.91-.03-1.783-.145-2.591-.332zM8.5 5.09V7.5h2.99a12.342 12.342 0 0 0-.399-2.741c-.808.187-1.681.301-2.591.332zM4.51 8.5c.035.987.176 1.914.399 2.741A13.612 13.612 0 0 1 7.5 10.91V8.5H4.51zm3.99 0v2.409c.91.03 1.783.145 2.591.332.223-.827.364-1.754.4-2.741H8.5zm-3.282 3.696c.12.312.252.604.395.872.552 1.035 1.218 1.65 1.887 1.855V11.91c-.81.03-1.577.13-2.282.287zm.11 2.276a6.696 6.696 0 0 1-.598-.933 8.853 8.853 0 0 1-.481-1.079 8.38 8.38 0 0 0-1.198.49 7.01 7.01 0 0 0 2.276 1.522zm-1.383-2.964A13.36 13.36 0 0 1 3.508 8.5h-2.49a6.963 6.963 0 0 0 1.362 3.675c.47-.258.995-.482 1.565-.667zm6.728 2.964a7.009 7.009 0 0 0 2.275-1.521 8.376 8.376 0 0 0-1.197-.49 8.853 8.853 0 0 1-.481 1.078 6.688 6.688 0 0 1-.597.933zM8.5 11.909v3.014c.67-.204 1.335-.82 1.887-1.855.143-.268.276-.56.395-.872A12.63 12.63 0 0 0 8.5 11.91zm3.555-.401c.57.185 1.095.409 1.565.667A6.963 6.963 0 0 0 14.982 8.5h-2.49a13.36 13.36 0 0 1-.437 3.008zM14.982 7.5a6.963 6.963 0 0 0-1.362-3.675c-.47.258-.995.482-1.565.667.248.92.4 1.938.437 3.008h2.49zM11.27 2.461c.177.334.339.694.482 1.078a8.368 8.368 0 0 0 1.196-.49 7.01 7.01 0 0 0-2.275-1.52c.218.283.418.597.597.932zm-.488 1.343a7.765 7.765 0 0 0-.395-.872C9.835 1.897 9.17 1.282 8.5 1.077V4.09c.81-.03 1.577-.13 2.282-.287z"
+          />
+        </svg>
+        <a :href="provider.website" target="_blank">Customer Service Website</a>
+      </li>
+    </ul>
+
+    <div
+      v-if="provider.message?.trim()"
+      class="alert alert-warning my-2"
+      v-html="md.makeHtml(provider.message)"
+    ></div>
+  </div>
+
+  <div v-else class="card-body text-center">No results</div>
+</template>

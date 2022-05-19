@@ -1,10 +1,6 @@
-import Vue from 'vue/dist/vue'
-import HcHaulerApp from './App.vue'
+import { createApp } from 'vue'
+import App from './App.vue'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'iframe-resizer/js/iframeResizer.contentWindow'
 
-Vue.config.productionTip = false
-
-Vue.use(HcHaulerApp, {
-  providers: window.providers
-})
-
-new Vue().$mount('#app')
+createApp(App).mount('#app')

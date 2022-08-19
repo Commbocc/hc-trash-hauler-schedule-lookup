@@ -116,10 +116,10 @@
     lodash-es "4.17.21"
     sortablejs "1.14.0"
 
-"@hcflgov/vue-esri-search@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@hcflgov/vue-esri-search/-/vue-esri-search-2.1.0.tgz#6b11792e34645c6afff192c723d43211da7e19a0"
-  integrity sha512-71X+ZeEmpdoQTQAU9M7icsx4r0OddScJGeSfeNNcm4c//5xxHu6f7C5Fom87l1IIAbgckvZGs0gbSrgcNarPRA==
+"@hcflgov/vue-esri-search@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@hcflgov/vue-esri-search/-/vue-esri-search-2.2.1.tgz#000583adaf9f76d3f5ec30cb0e4f67b176e21a96"
+  integrity sha512-EE3gm0Fq5tUWuv5GmraxNHwtzX8qHcsxpc9tTpoR9kQQ0HdS+FzPHdjUIG5VLiikOveAcOAL0HM+ODC12x4w0g==
   dependencies:
     "@arcgis/core" "^4.22.2"
     vue "^3.2.25"

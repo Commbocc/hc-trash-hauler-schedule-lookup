@@ -21,14 +21,14 @@ export const schedule = reactive<IReactiveSchedule>({
   },
 })
 
-export async function fetchScheduleFeatures(extent: __esri.Extent) {
+export async function fetchScheduleFeatures(geometry: __esri.Geometry) {
   schedule.loading = true
   try {
     let key: ScheduleTypes
     for (key in endpoints) {
       try {
         featureLayerProps.url = endpoints[key]
-        const [firstFeature] = await queryFeatures(extent)
+        const [firstFeature] = await queryFeatures(geometry)
         schedule.data[key] = firstFeature?.toJSON().attributes || undefined
       } catch (error) {
         console.info(`unable to find ${key} schedule`)

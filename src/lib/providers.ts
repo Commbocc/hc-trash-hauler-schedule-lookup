@@ -16,7 +16,7 @@ export const esriProvider = reactive<IReactiveEsriProvider>({
   loading: false,
 })
 
-export async function fetchProviderFeatures(extent: __esri.Extent) {
+export async function fetchProviderFeatures(geometry: __esri.Geometry) {
   esriProvider.loading = true
   esriProvider.lookup = undefined
 
@@ -24,7 +24,7 @@ export async function fetchProviderFeatures(extent: __esri.Extent) {
     for (const { url, lookup } of providerEndpoints) {
       try {
         featureLayerProps.url = url
-        const [firstFeature] = await queryFeatures(extent)
+        const [firstFeature] = await queryFeatures(geometry)
         if (!firstFeature) continue
         return (esriProvider.lookup = firstFeature?.attributes[lookup])
       } catch (error) {

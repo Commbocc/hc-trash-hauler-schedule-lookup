@@ -14,8 +14,8 @@ export const watchResults = async (results: __esri.SearchResult[]) => {
   searchResults.status = `Results for ${firstResult.name}`
 
   await Promise.allSettled([
-    fetchProviderFeatures(firstResult?.extent),
-    fetchScheduleFeatures(firstResult?.extent),
+    fetchProviderFeatures(firstResult?.feature?.geometry),
+    fetchScheduleFeatures(firstResult?.feature?.geometry),
   ])
 }
 

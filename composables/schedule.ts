@@ -1,4 +1,3 @@
-import { computed, reactive } from 'vue'
 import { featureLayerProps, queryFeatures } from '@hcflgov/vue-esri-search'
 import { nextDaysOfWeekWithHolidays, sortDatesAsc } from './utils'
 import { DaysOfWeek } from './holidays'
@@ -12,7 +11,7 @@ const endpoints: Record<ScheduleTypes, string> = {
   yard: `${scheduleEndpoint}/0`,
 }
 
-export const schedule = reactive<IReactiveSchedule>({
+const schedule = reactive<IReactiveSchedule>({
   loading: false,
   data: {
     garbage: undefined,
@@ -21,7 +20,7 @@ export const schedule = reactive<IReactiveSchedule>({
   },
 })
 
-export async function fetchScheduleFeatures(geometry: __esri.Geometry) {
+async function fetchScheduleFeatures(geometry: __esri.Geometry) {
   schedule.loading = true
   try {
     let key: ScheduleTypes
@@ -39,7 +38,7 @@ export async function fetchScheduleFeatures(geometry: __esri.Geometry) {
   }
 }
 
-export const weekdays = computed<
+const weekdays = computed<
   Record<ScheduleTypes, (keyof typeof DaysOfWeek)[] | undefined>
 >(() => {
   const { garbage, recycle, yard } = schedule.data
@@ -50,7 +49,7 @@ export const weekdays = computed<
   }
 })
 
-export const nextDates = computed<
+const nextDates = computed<
   Record<ScheduleTypes, INextDateResult[] | undefined>
 >(() => {
   const { garbage, recycle, yard } = weekdays.value
@@ -73,9 +72,19 @@ export const nextDates = computed<
   }
 })
 
-export const hasSchedule = computed<boolean>(
+const hasSchedule = computed<boolean>(
   () =>
     schedule.data.garbage !== undefined ||
     schedule.data.recycle !== undefined ||
     schedule.data.yard !== undefined
 )
+
+export const useSchedule = () => {
+  return {
+    schedule,
+    fetchScheduleFeatures,
+    weekdays,
+    nextDates,
+    hasSchedule,
+  }
+}

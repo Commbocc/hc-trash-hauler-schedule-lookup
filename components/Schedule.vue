@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { schedule, weekdays, nextDates, hasSchedule } from '../lib/schedule'
-import { hasProvider } from '../lib/providers'
-import { CollectionTypes } from '../lib/utils'
+const { schedule, weekdays, nextDates, hasSchedule } = useSchedule()
+const { hasProvider } = useProvider()
 
 const dateOptions: Intl.DateTimeFormatOptions = {
   weekday: 'short',
@@ -22,12 +21,12 @@ const dateOptions: Intl.DateTimeFormatOptions = {
     <tbody>
       <template v-for="(days, type) in weekdays">
         <tr v-if="days">
-          <th :id="CollectionTypes[type]">
-            {{ CollectionTypes[type] }} Days
+          <th :id="type" class="text-capitalize">
+            {{ type }} Days
             <small class="d-block fw-light">Next Pickup Date(s)</small>
           </th>
 
-          <td :aria-describedby="CollectionTypes[type]">
+          <td :aria-describedby="type">
             {{ days.map((d) => `${d.toString()}s`).join(' & ') }}
 
             <ul>

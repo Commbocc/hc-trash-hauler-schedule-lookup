@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { esriProvider, provider, airtableProviders } from '../lib/providers'
-import { formatPhone } from '../lib/utils'
 import { Converter } from 'showdown'
+
+const { esriProvider, provider, airtableProviders } = useProvider()
+
 const md = new Converter()
 </script>
 
@@ -37,7 +37,7 @@ const md = new Converter()
           />
         </svg>
         <a :href="`tel:${provider.phone}`">
-          {{ formatPhone(provider.phone) }}
+          {{ usePhoneFormat(provider.phone) }}
         </a>
       </li>
 
@@ -57,7 +57,7 @@ const md = new Converter()
           />
         </svg>
         <a :href="`fax:${provider.fax}`">
-          {{ formatPhone(provider.fax) }}
+          {{ usePhoneFormat(provider.fax) }}
         </a>
       </li>
 

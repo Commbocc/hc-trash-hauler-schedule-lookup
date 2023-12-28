@@ -1,4 +1,3 @@
-import { reactive, computed } from 'vue'
 import { featureLayerProps, queryFeatures } from '@hcflgov/vue-esri-search'
 
 const providerEndpoints = [
@@ -12,11 +11,11 @@ const providerEndpoints = [
   },
 ]
 
-export const esriProvider = reactive<IReactiveEsriProvider>({
+const esriProvider = reactive<IReactiveEsriProvider>({
   loading: false,
 })
 
-export async function fetchProviderFeatures(geometry: __esri.Geometry) {
+async function fetchProviderFeatures(geometry: __esri.Geometry) {
   esriProvider.loading = true
   esriProvider.lookup = undefined
 
@@ -36,12 +35,12 @@ export async function fetchProviderFeatures(geometry: __esri.Geometry) {
   }
 }
 
-export const airtableProviders = reactive<IReactiveAirtableProviders>({
+const airtableProviders = reactive<IReactiveAirtableProviders>({
   loading: false,
   data: [],
 })
 
-export async function fetchAirtableProviders() {
+async function fetchAirtableProviders() {
   airtableProviders.loading = true
   try {
     const { records } = await fetch(
@@ -55,7 +54,7 @@ export async function fetchAirtableProviders() {
   }
 }
 
-export const provider = computed(() =>
+const provider = computed(() =>
   esriProvider.lookup
     ? airtableProviders.data.find(({ fields }) =>
         fields.lookups.includes(esriProvider.lookup!)
@@ -63,6 +62,17 @@ export const provider = computed(() =>
     : undefined
 )
 
-export const hasProvider = computed<boolean>(
+const hasProvider = computed<boolean>(
   () => airtableProviders.data.length > 0 && esriProvider.lookup !== undefined
 )
+
+export const useProvider = () => {
+  return {
+    esriProvider,
+    fetchProviderFeatures,
+    airtableProviders,
+    fetchAirtableProviders,
+    provider,
+    hasProvider,
+  }
+}

@@ -1,1 +1,0 @@
-import{C as o,G as e,as as a}from"./index.1cb8d8e9.js";import{p}from"./route.7df0d92f.js";import"./NAMessage.f021b5ad.js";import"./GPMessage.8a6ddea3.js";import"./normalizeUtils.eed8cb48.js";import"./DirectionsFeatureSet.36b35498.js";let s=class extends a{constructor(r){super(r)}solve(r,t){return p(this.url,r,t)}};s=o([e("esri.tasks.RouteTask")],s);const f=s;export{f as default};

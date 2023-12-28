@@ -1,11 +1,11 @@
-import { ref } from 'vue'
 import { input, searchResults } from '@hcflgov/vue-esri-search'
-import { fetchProviderFeatures } from './providers'
-import { fetchScheduleFeatures } from './schedule'
 
-export const hasSearched = ref<boolean>(false)
+const hasSearched = ref<boolean>(false)
 
-export const watchResults = async (results: __esri.SearchResult[]) => {
+const watchResults = async (results: __esri.SearchResult[]) => {
+  const { fetchProviderFeatures } = useProvider()
+  const { fetchScheduleFeatures } = useSchedule()
+
   hasSearched.value = true
   searchResults.status = null
   if (!results.length) throw 'No Search Results'
@@ -17,6 +17,13 @@ export const watchResults = async (results: __esri.SearchResult[]) => {
     fetchProviderFeatures(firstResult?.feature?.geometry),
     fetchScheduleFeatures(firstResult?.feature?.geometry),
   ])
+}
+
+export const useSearch = () => {
+  return {
+    hasSearched,
+    watchResults,
+  }
 }
 
 if (import.meta.env.DEV) {

@@ -100,18 +100,9 @@ export function sortDatesAsc(a: INextDateResult, b: INextDateResult) {
  *
  * @param phone
  */
-export function formatPhone(phone: string) {
+export function usePhoneFormat(phone: string) {
   return `(${phone.substring(0, 3)}) ${phone.substring(3, 6)}-${phone.substring(
     6,
     10
   )}`
-}
-
-/**
- *
- */
-export enum CollectionTypes {
-  garbage = 'Garbage',
-  recycle = 'Recycling',
-  yard = 'Yard Waste',
 }

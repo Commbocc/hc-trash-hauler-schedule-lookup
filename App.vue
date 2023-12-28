@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { SearchBootstrap } from '@hcflgov/vue-esri-search'
-import Schedule from './components/Schedule.vue'
-import Provider from './components/Provider.vue'
-import { watchResults, hasSearched } from './lib'
-import { fetchAirtableProviders } from './lib/providers'
+import 'iframe-resizer/js/iframeResizer.contentWindow'
+
+const { watchResults, hasSearched } = useSearch()
+const { fetchAirtableProviders } = useProvider()
 
 fetchAirtableProviders()
 </script>

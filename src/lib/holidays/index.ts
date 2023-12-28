@@ -24,7 +24,18 @@ const recyclingConfig: IHolidayConfig = {
 }
 
 /**
- * Trash & Yard waste holiday schedule
+ * Yard waste holiday schedule
+ * all days in recycling schedule
+ */
+const yardConfig: IHolidayConfig = {
+  holidays: [
+    ...recyclingConfig.holidays,
+    //
+  ],
+}
+
+/**
+ * Trash holiday schedule
  * all days in recycling schedule + New Year
  */
 const standardConfig: IHolidayConfig = {
@@ -66,4 +77,5 @@ export class IsHoliday {
  * export clients
  */
 export const recyclingClient = new IsHoliday(recyclingConfig)
+export const yardClient = new IsHoliday(yardConfig)
 export const standardClient = new IsHoliday(standardConfig)

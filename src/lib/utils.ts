@@ -1,4 +1,10 @@
-import { standardClient, recyclingClient, DaysOfWeek } from './holidays'
+import {
+  standardClient,
+  recyclingClient,
+  yardClient,
+  DaysOfWeek,
+} from './holidays'
+import type { IsHoliday } from './holidays'
 
 /**
  *
@@ -43,12 +49,23 @@ export function nextDaysOfWeekWithHolidays(
 
   let nextDate: Date = nexDayOfWeek(dayOfWeek)
 
+  let holidayClient: IsHoliday
+
+  switch (this) {
+    case 'recycle':
+      holidayClient = recyclingClient
+      break
+    case 'yard':
+      holidayClient = yardClient
+      break
+    default:
+      holidayClient = standardClient
+      break
+  }
+
   let dateResult: INextDateResult = {
     date: nextDate,
-    isHoliday:
-      this === 'recycle'
-        ? recyclingClient.isHoliday(nextDate)
-        : standardClient.isHoliday(nextDate),
+    isHoliday: holidayClient.isHoliday(nextDate),
   }
 
   dateResults.push(dateResult)

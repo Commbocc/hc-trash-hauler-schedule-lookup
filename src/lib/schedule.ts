@@ -65,7 +65,10 @@ export const nextDates = computed<
           .sort(sortDatesAsc)
       : undefined,
     yard: yard
-      ? yard.map(nextDaysOfWeekWithHolidays).flat().sort(sortDatesAsc)
+      ? yard
+          .map(nextDaysOfWeekWithHolidays.bind('yard'))
+          .flat()
+          .sort(sortDatesAsc)
       : undefined,
   }
 })

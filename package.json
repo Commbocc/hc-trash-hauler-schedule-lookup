@@ -20,6 +20,6 @@
   "devDependencies": {
     "@nuxt/devtools": "^1.0.4",
     "@types/showdown": "^1.9.4",
-    "nuxt": "3.8.2"
+    "nuxt": "3.12.4"
   }
 }

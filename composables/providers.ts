@@ -44,7 +44,7 @@ async function fetchAirtableProviders() {
   airtableProviders.loading = true
   try {
     const { records } = await fetch(
-      'https://hc-caching-proxy.herokuapp.com/airtable/appQrDnZGUnnURpdH/providers'
+      'https://hc-airtable-caching-proxy.netlify.app/api/v1/airtable/appQrDnZGUnnURpdH/providers'
     ).then((r) => r.json())
     airtableProviders.data = records
   } catch (error) {

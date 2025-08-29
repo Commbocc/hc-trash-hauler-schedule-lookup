@@ -70,19 +70,19 @@ export function nextDaysOfWeekWithHolidays(
 
   dateResults.push(dateResult)
 
-  while (dateResult.isHoliday) {
-    nextDate = nexDayOfWeek(dayOfWeek, dateResult.date, true)
+  // while (dateResult.isHoliday) {
+  //   nextDate = nexDayOfWeek(dayOfWeek, dateResult.date, true)
 
-    dateResult = {
-      date: nextDate,
-      isHoliday:
-        this === 'recycle'
-          ? recyclingClient.isHoliday(nextDate)
-          : standardClient.isHoliday(nextDate),
-    }
+  //   dateResult = {
+  //     date: nextDate,
+  //     isHoliday:
+  //       this === 'recycle'
+  //         ? recyclingClient.isHoliday(nextDate)
+  //         : standardClient.isHoliday(nextDate),
+  //   }
 
-    dateResults.push(dateResult)
-  }
+  //   dateResults.push(dateResult)
+  // }
 
   return dateResults
 }

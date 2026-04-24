@@ -1,0 +1,1 @@
+import{ai as o,$ as e,a2 as a}from"./DD8u4BxS.js";import{p as i}from"./BpR5ucin.js";import"./BrIEMWZX.js";import"./BGarsPCW.js";import"./DaBAefuI.js";import"./B49ufhHV.js";let t=class extends o{constructor(r){super(r)}solve(r,s){return i(this.url,r,s)}};t=e([a("esri.tasks.RouteTask")],t);const $=t;export{$ as default};

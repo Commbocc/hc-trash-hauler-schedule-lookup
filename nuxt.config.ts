@@ -5,5 +5,11 @@ export default defineNuxtConfig({
   css: ['bootstrap/dist/css/bootstrap.min.css'],
   app: {
     baseURL: '/hc-trash-hauler-schedule-lookup/',
+    head: {
+      title: 'Trash Hauler Schedule Lookup',
+      htmlAttrs: {
+        lang: 'en',
+      },
+    },
   },
 })

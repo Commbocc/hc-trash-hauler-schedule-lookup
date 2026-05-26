@@ -2,7 +2,7 @@ type ScheduleTypes = 'garbage' | 'recycle' | 'yard'
 
 interface IReactiveSchedule {
   loading: boolean
-  data: Record<ScheduleTypes, Record<string, any> | undefined>
+  data: Record<ScheduleTypes, Record<string, unknown> | undefined>
 }
 
 /**

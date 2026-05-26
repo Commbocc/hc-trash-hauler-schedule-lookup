@@ -7,17 +7,17 @@ export * from './tests'
 const recyclingConfig: IHolidayConfig = {
   holidays: [
     // Martin Luther King, Jr. Day (Third Monday in January)
-    Tests.MonthsNthDayOfWeek(Months.January, DaysOfWeek.Monday, 3),
+    Tests.MonthsNthDayOfWeek(Months.January, DaysOfWeek.monday, 3),
     // Memorial Day (Last Monday in May)
-    Tests.MonthsLastDayOfWeek(Months.May, DaysOfWeek.Monday),
+    Tests.MonthsLastDayOfWeek(Months.May, DaysOfWeek.monday),
     // Juneteenth (June 19)
     Tests.ExactMonthDate(Months.June, 19),
     // Independence Day (July 4)
     Tests.ExactMonthDate(Months.July, 4),
     // Labor Day (First Monday in September)
-    Tests.MonthsFirstDayOfWeek(Months.September, DaysOfWeek.Monday),
+    Tests.MonthsFirstDayOfWeek(Months.September, DaysOfWeek.monday),
     // Thanksgiving Day (Fourth Thursday in November)
-    Tests.MonthsNthDayOfWeek(Months.November, DaysOfWeek.Thursday, 4),
+    Tests.MonthsNthDayOfWeek(Months.November, DaysOfWeek.thursday, 4),
     // Christmas Day (December 25)
     Tests.ExactMonthDate(Months.December, 25),
   ],
@@ -64,6 +64,10 @@ export class IsHoliday {
   }
 
   isHoliday(date: Date): boolean {
+    if (isNaN(date.getTime())) {
+      throw new Error('Invalid date')
+    }
+
     let result = false
     for (let test of this.holidays) {
       result = test(date)

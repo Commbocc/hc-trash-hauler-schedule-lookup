@@ -27,7 +27,9 @@ const dateOptions: Intl.DateTimeFormatOptions = {
           </th>
 
           <td :aria-describedby="type">
-            {{ days.map((d) => `${d.toString()}s`).join(' & ') }}
+            <span class="text-capitalize">
+              {{ days.map((d) => `${d.toString()}s`).join(' & ') }}
+            </span>
 
             <ul>
               <li v-for="result in nextDates[type]">

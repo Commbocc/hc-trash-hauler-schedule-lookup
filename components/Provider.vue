@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { Converter } from 'showdown'
+import { marked } from 'marked'
 
 const { esriProvider, provider, airtableProviders } = useProvider()
-
-const md = new Converter()
 </script>
 
 <template>
@@ -99,7 +97,7 @@ const md = new Converter()
     <div
       v-if="provider.message?.trim()"
       class="alert alert-warning my-2"
-      v-html="md.makeHtml(provider.message)"
+      v-html="marked.parse(provider.message)"
     ></div>
   </div>
 

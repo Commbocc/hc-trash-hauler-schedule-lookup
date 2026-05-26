@@ -1,28 +1,38 @@
 import { input, searchResults } from '@hcflgov/vue-esri-search'
 
-const hasSearched = ref<boolean>(false)
-
-const watchResults = async (results: __esri.SearchResult[]) => {
-  const { fetchProviderFeatures } = useProvider()
-  const { fetchScheduleFeatures } = useSchedule()
-
-  hasSearched.value = true
-  searchResults.status = null
-  if (!results.length) throw 'No Search Results'
-  const [firstResult] = results
-
-  searchResults.status = `Results for ${firstResult.name}`
-
-  await Promise.allSettled([
-    fetchProviderFeatures(firstResult?.feature?.geometry),
-    fetchScheduleFeatures(firstResult?.feature?.geometry),
-  ])
-}
-
 export const useSearch = () => {
+  const hasSearched = useState<boolean>('hasSearched', () => false)
+
+  const fetchResults = async (results: __esri.SearchResult[]) => {
+    const { fetchProviderFeatures } = useProvider()
+    const { fetchScheduleFeatures } = useSchedule()
+
+    hasSearched.value = true
+    searchResults.status = null
+    if (!results.length) throw 'No Search Results'
+    const [firstResult] = results
+
+    searchResults.status = `Results for ${firstResult?.name}`
+
+    const geo = firstResult?.feature?.geometry
+
+    // console.log({ geo })
+
+    if (!firstResult?.feature?.geometry) {
+      console.warn('No Geo found')
+
+      return
+    }
+
+    await Promise.allSettled([
+      fetchProviderFeatures(firstResult.feature.geometry),
+      fetchScheduleFeatures(firstResult.feature.geometry),
+    ])
+  }
+
   return {
     hasSearched,
-    watchResults,
+    fetchResults,
   }
 }
 
